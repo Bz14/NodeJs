@@ -1,5 +1,5 @@
-let data = require("../../data/seedData");
-const Vehicle = require("../../models/vehicle");
+let data = require("../data/seedData");
+const Vehicle = require("../models/vehicle");
 
 exports.seed = function () {
   return data;

@@ -2,6 +2,6 @@ version: "3"
 
 services:
   web:
-    image: jamesmillar/vehicleservice:latest
+    image: ab731/vehicleservice:latest
     ports:
       - "3000:3000"

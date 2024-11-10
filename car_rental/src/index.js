@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const vehicleService = require("./src/services/vehicleService");
+const vehicleService = require("./services/vehicleService");
 
 app.use(bodyParser.json());
 
