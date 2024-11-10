@@ -1,25 +1,15 @@
-const { v4: uuidv4 } = require("uuid");
+const mongoose = require("mongoose");
 
-class Vehicle {
-  constructor(regNo, make, model, year, price) {
-    if (
-      typeof regNo !== "string" ||
-      typeof make !== "string" ||
-      typeof model !== "string" ||
-      typeof model !== "string"
-    ) {
-      throw new Error("Registration, make and models must be a strings");
-    }
-    if (typeof year !== "number" || typeof price !== "number") {
-      throw new Error("Year and price must be a number");
-    }
-    this.regNo = regNo;
-    this.make = make;
-    this.model = model;
-    this.year = year;
-    this.price = price;
-    this.id = uuidv4();
-  }
-}
+const vehicleSchema = new mongoose.Schema({
+  regNo: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  make: String,
+  model: String,
+  year: Number,
+  rentalPrice: Number,
+});
 
-module.exports = Vehicle;
+module.exports = mongoose.model("vehicleModel", vehicleSchema);

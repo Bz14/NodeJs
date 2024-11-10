@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "car_rental": "file:",
+    "cors": "^2.8.5",
+    "mongoose": "^8.8.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.0.2"

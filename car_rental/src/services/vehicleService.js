@@ -1,42 +1,55 @@
-let data = require("../data/seedData");
 const Vehicle = require("../models/vehicle");
+const { connect, disconnect } = require("../db_client");
 
-exports.seed = function () {
-  return data;
+exports.seed = async function () {
+  await connect();
+
+  // await disconnect();
 };
 
-exports.createVehicle = function (req, res) {
-  const regNo = String(req.body.regNo);
-  const make = String(req.body.make);
-  const model = String(req.body.model);
-  const year = parseInt(req.body.year);
-  const price = parseInt(req.body.price);
-  const vehicle = new Vehicle(regNo, make, model, year, price);
-  console.log(req.body, vehicle);
-
-  if (
-    !vehicle.regNo ||
-    !vehicle.make ||
-    !vehicle.model ||
-    !vehicle.year ||
-    !vehicle.price
-  ) {
-    return res.status(400).send({ message: "Invalid vehicle data" });
+exports.createVehicle = async function (req, res) {
+  const vehicle = new Vehicle(req.body);
+  try {
+    console.log("=====", vehicle);
+    await vehicle.save();
+    res.status(201).send(vehicle);
+  } catch (e) {
+    console.log("=====", vehicle);
+    res.status(500).send(e.message);
   }
-
-  data.push(vehicle);
-
-  res.status(201).send("Vehicle created");
 };
 
-exports.updateVehicle = function (req, res) {
+exports.updateVehicle = async function (req, res) {
   const id = req.params.id;
   try {
-    const idx = data.findIndex((v) => v.id === id);
+    const vehicle = await Vehicle.findByIdAndUpdate(id, req.body);
 
-    if (idx !== -1) {
-      data[idx] = { ...data[idx], ...req.body };
-      res.status(200).send(data[idx]);
+    if (vehicle) {
+      res.status(200).send(vehicle);
+    }
+    res.status(404).send("Vehicle not found");
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+};
+
+exports.getVehicles = async function (req, res) {
+  try {
+    const data = await Vehicle.find();
+    res.status(200).send(data);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+};
+
+exports.getVehicle = async function (req, res) {
+  const id = req.params.id;
+
+  try {
+    const vehicle = await Vehicle.findById(id);
+
+    if (vehicle) {
+      res.status(200).send(vehicle);
     } else {
       res.status(404).send("Vehicle not found");
     }
@@ -45,32 +58,16 @@ exports.updateVehicle = function (req, res) {
   }
 };
 
-exports.getVehicles = function (req, res) {
-  res.status(200).send(data);
-};
+exports.deleteVehicle = async function (req, res) {
+  try {
+    const vehicle = await Vehicle.findByIdAndDelete(req.params.id);
 
-exports.getVehicle = function (req, res) {
-  const id = req.params.id;
-
-  const vehicle = data.find((v) => v.id === id);
-  console.log(vehicle, id);
-
-  if (vehicle) {
-    res.status(200).send(vehicle);
-  } else {
-    res.status(404).send("Vehicle not found");
+    if (vehicle) {
+      res.status(204).send({ message: "Vehicle deleted" });
+    } else {
+      res.status(404).send("Vehicle not found");
+    }
+  } catch (e) {
+    res.status(500).send(e.message);
   }
-};
-
-exports.deleteVehicle = function (req, res) {
-  const id = req.params.id;
-
-  const idx = data.findIndex((v) => v.id === id);
-  if (idx === -1) {
-    return res.status(404).send("Vehicle not found");
-  }
-
-  data.splice(idx, 1);
-
-  res.status(204).send({ message: "Vehicle deleted" });
 };
