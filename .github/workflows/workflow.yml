@@ -29,7 +29,3 @@ jobs:
       - name: Display Node.js version
         run: node --version
       - run: echo "The tools are located at ${{ runner.tool_cache }}."
-      - name: List files in tool cache
-        run: |
-          ls ${{ runner.tool_cache }}'
-          - run: echo "Job status: ${{job.status}}"
