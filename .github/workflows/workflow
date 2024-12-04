@@ -1,36 +1,35 @@
 name: Github actions demo
 on:
   push
+
 jobs:
   Example-actions-job:
     name: Exploring github actions
     runs-on: ubuntu-latest
     steps:
-      - run: echo "The job was triggered by ${{github.event_name}} event."
-      - run: echo "This job is now running on a ${{runner.os}}"
-      - run: echo "Brance ${{github.ref}} and repository ${{github.repository}}"
+      - run: echo "The job was triggered by ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }}"
+      - run: echo "Branch ${{ github.ref }} and repository ${{ github.repository }}"
       - name: Checkout repository code
         uses: actions/checkout@v2
-      - run: echo "The ${{github.repository}} cloned to the runner"
-      - run: echo "The code is copied to the path ${{github.workspace}}"
-      - run: echo "The workflow is ready to test your code to the runner."
+      - run: echo "The ${{ github.repository }} cloned to the runner"
+      - run: echo "The code is copied to the path ${{ github.workspace }}"
+      - run: echo "The workflow is ready to test your code on the runner."
       - name: Conditional event
-        if: ${{github.event_name == "pull_request"}}
-        run:
-          ls ${{github.workspace}}
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          ls ${{ github.workspace }}
       - name: List files in the directory
         run: |
-          ls ${{github.workspace}}
-      - name: setup node runner
+          ls ${{ github.workspace }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Display node version
+      - name: Display Node.js version
         run: node --version
-      - run: echo "The tools are locates ${{runner.tool_cache}}."
+      - run: echo "The tools are located at ${{ runner.tool_cache }}."
       - name: List files in tool cache
         run: |
-          ls ${{runner.tool_cache}}
-      - run:
-          echo "Jobs status${{job.status}}"
-      
+          ls ${{ runner.tool_cache }}
+      - run: echo "Job status: ${{ job.status }}"
