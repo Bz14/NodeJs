@@ -29,3 +29,8 @@ jobs:
       - name: Display Node.js version
         run: node --version
       - run: echo "The tools are located at ${{ runner.tool_cache }}."
+  Second-Job:
+    runs-on: ubuntu@latest
+    needs: Example-actions-job
+    steps:
+      - run: echo "The job is running ${{runner.os}}"
